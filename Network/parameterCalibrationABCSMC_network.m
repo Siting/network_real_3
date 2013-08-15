@@ -6,6 +6,7 @@ global sensorMode
 global perturbationFactor
 global boundarySourceSensorIDs
 global boundarySinkSensorIDs
+global samplingStrategy
 
 tTotalStart = tic;
 % load config & para & map
@@ -75,6 +76,7 @@ for stage = 1 : numStages  % iterate stages
                 index = (times-1)*samplingSize + sample;
                 
                 % sampling parameters for FUNDAMENTAL diagram
+                % only used for funsOption==1
                 FUNDAMENTAL = sampleFUNDA(guessedFUNDAMENTAL, vmaxVar, dmaxVar, dcVar);
 
                 % Initialize links

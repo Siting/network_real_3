@@ -7,7 +7,7 @@ function[LINK, SOURCE_LINK, SINK_LINK, JUNCTION, numCellsNet, ALL_SAMPLES, numLa
 % vmax: miles/hour
 % dmax: vehs/mile
 % dc: vehs/mile
-[LINK, ROUND_SAMPLES] = loadLinksNew(linkMap, FUNDAMENTAL,CONFIG.configID, LINK, ROUND_SAMPLES);
+[LINK, ROUND_SAMPLES] = loadLinksNew_newStrategy(linkMap, FUNDAMENTAL,CONFIG.configID, LINK, ROUND_SAMPLES);
 ALL_SAMPLES = saveSamplesForLinks(LINK, ALL_SAMPLES);
 numLanes = LINK(1).numLanes;
 
