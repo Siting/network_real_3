@@ -72,17 +72,17 @@ for stage = 1 : numStages  % iterate stages
             disp('start simulation');
             
             for sample = 1 : samplingSize
-                    
+                
                 index = (times-1)*samplingSize + sample;
                 
                 % sampling parameters for FUNDAMENTAL diagram
                 % only used for funsOption==1
                 FUNDAMENTAL = sampleFUNDA(guessedFUNDAMENTAL, vmaxVar, dmaxVar, dcVar);
-
+                
                 % Initialize links
                 [LINK, SOURCE_LINK, SINK_LINK, JUNCTION, numCellsNet, ALL_SAMPLES, numLanes, ROUND_SAMPLES] = initializeAll_network(FUNDAMENTAL, linkMap, JUNCTION, deltaT, numEns, CONFIG, ALL_SAMPLES,...
                     SOURCE_LINK, SINK_LINK, junctionSolverType, LINK, ROUND_SAMPLES);
-          
+                
                 % run forward simulation
                 [LINK] = runForwardSimulation(LINK, SOURCE_LINK, SINK_LINK, JUNCTION, deltaT,...
                     numEns, numTimeSteps, nT, junctionSolverType, occuDataMatrix_source, occuDataMatrix_sink);
@@ -106,7 +106,7 @@ for stage = 1 : numStages  % iterate stages
             [ACCEPTED_POP, REJECTED_POP, indexCollection, errorCollectionForStage] = ABC_SMC_stage1_type2_network(measConfigID, CONFIG.configID, samplingSize, ALL_SAMPLES,...
                 populationSize, times, ACCEPTED_POP, REJECTED_POP, indexCollection, testingSensorIDs, sensorDataMatrix, nodeMap,...
                 sensorMetaDataMap, linkMap,stage, T, deltaTinSecond, thresholdVector, errorCollectionForStage, ROUND_SAMPLES);
-
+            
             % check accepted population Size
             if size(ACCEPTED_POP(1).samples,2) >= populationSize
                 ar = size(ACCEPTED_POP(1).samples,2) / (times*samplingSize);
@@ -134,7 +134,7 @@ for stage = 1 : numStages  % iterate stages
         save([evolutionDataFolder '-rejectedPop-stage-' num2str(stage)], 'REJECTED_POP');
         save([evolutionDataFolder '-errorCollection-stage-' num2str(stage)], 'errorCollectionForStage');
         save([evolutionDataFolder '-weights-stage-' num2str(stage)], 'weights');
-   
+        
         
     else
         if sensorMode == 2
@@ -144,10 +144,20 @@ for stage = 1 : numStages  % iterate stages
         end
         stageStart = tic;
         
-        [ACCEPTED_POP, weights, ar, REJECTED_POP, errorCollectionForStage, thresholdVector, criteriaForStage] = ABC_SMC_stage2AndLater2_type2_network(measConfigID, configID, samplingSize, criteria,...
-            ACCEPTED_POP, REJECTED_POP, ALL_SAMPLES, weights, populationSize, PARAMETER, CONFIG,...
-            sensorMetaDataMap, LINK, SOURCE_LINK, SINK_LINK, JUNCTION, stage, linkMap, testingSensorIDs,...
-            sensorDataMatrix, nodeMap, errorCollectionForStage, ROUND_SAMPLES, occuDataMatrix_source, occuDataMatrix_sink);
+        if samplingStrategy == 2
+            [ACCEPTED_POP, weights, ar, REJECTED_POP, errorCollectionForStage, thresholdVector, criteriaForStage]...
+                = ABC_SMC_stage2AndLater2_newStrategy_type2_network(measConfigID, configID, samplingSize, criteria,...
+                ACCEPTED_POP, REJECTED_POP, ALL_SAMPLES, weights, populationSize, PARAMETER, CONFIG,...
+                sensorMetaDataMap, LINK, SOURCE_LINK, SINK_LINK, JUNCTION, stage, linkMap, testingSensorIDs,...
+                sensorDataMatrix, nodeMap, errorCollectionForStage, ROUND_SAMPLES, occuDataMatrix_source, occuDataMatrix_sink);
+        elseif samplingStrategy == 1
+            [ACCEPTED_POP, weights, ar, REJECTED_POP, errorCollectionForStage, thresholdVector, criteriaForStage] = ABC_SMC_stage2AndLater2_type2_network(measConfigID, configID, samplingSize, criteria,...
+                ACCEPTED_POP, REJECTED_POP, ALL_SAMPLES, weights, populationSize, PARAMETER, CONFIG,...
+                sensorMetaDataMap, LINK, SOURCE_LINK, SINK_LINK, JUNCTION, stage, linkMap, testingSensorIDs,...
+                sensorDataMatrix, nodeMap, errorCollectionForStage, ROUND_SAMPLES, occuDataMatrix_source, occuDataMatrix_sink);
+        else
+            disp('sampling strategy is not assigned.');
+        end
         
         save([evolutionDataFolder '-acceptedPop-stage-' num2str(stage)], 'ACCEPTED_POP');
         save([evolutionDataFolder '-rejectedPop-stage-' num2str(stage)], 'REJECTED_POP');
@@ -166,13 +176,10 @@ for stage = 1 : numStages  % iterate stages
     weightsForRounds = [weightsForRounds; weights];
     criteriaForRounds = [criteriaForRounds; criteriaForStage];
     save([evolutionDataFolder '-calibrationResult-stage' num2str(stage)],'ar', 'meanForLinks', 'varForLinks', 'thresholdVector',...
-    'stageT', 'criteriaForStage', 'weightsForRounds', 'perturbationFactor');
-
+        'stageT', 'criteriaForStage', 'weightsForRounds', 'perturbationFactor');
+    
 end
 
 tTotalEnd = toc(tTotalStart);
 save([evolutionDataFolder '-calibrationResult'],'arForRounds', 'meanForRounds', 'varForRounds', 'thresholdVector',...
     'timeForRounds', 'weightsForRounds', 'tTotalEnd', 'criteriaForRounds', 'perturbationFactor');
-
-
-

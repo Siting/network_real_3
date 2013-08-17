@@ -3,7 +3,7 @@ function[choice, sensorSelection, sampleError] = rejectAccept_network(errorMatri
 
 % compute L2 distance
 [distances] = computeL2Distance_network(errorMatrix);
-keyboard
+
 % store in errorCollection matrix
 sampleError = max(distances);
 A = ones(1,2);

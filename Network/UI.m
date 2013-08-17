@@ -25,11 +25,11 @@ global samplingStrategy
 
 
 % name the index of configuration(s) 
-configID = [11];
+configID = [51];
 
 % boundary sensorIDs & testing sensorIDs
 samplingStrategy = 2; % 2: new
-thresholdChoice = 2;  % 1: manually 2:adaptive
+thresholdChoice = 1;  % 1: manually 2:adaptive
 expectAR = 0.6;
 sensorMode = 2; % 1: density, 2: flow
 errorStart = 4;  % # of data ignored ahead

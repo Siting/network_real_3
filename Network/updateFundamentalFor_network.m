@@ -15,8 +15,7 @@ for i = 1 : length(linkIDs)
     LINK(linkIDs{i}) = link;
     
     if sensorMode == 2
-        if i == 5 || i == 7
-            
+        if i == 5 || i == 7            
             sample = [link.vmax; link.dmax; link.dc];
             ROUND_SAMPLES(i).samples = [ROUND_SAMPLES(i).samples sample];
         end
