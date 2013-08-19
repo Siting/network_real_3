@@ -145,7 +145,7 @@ for stage = 1 : numStages  % iterate stages
             ROUND_SAMPLES = [];
         end
         stageStart = tic;
-        keyboard
+
         if samplingStrategy == 2
             [ACCEPTED_POP, weights, ar, REJECTED_POP, errorCollectionForStage, thresholdVector, criteriaForStage, travelTime_means, travelTime_vars]...
                 = ABC_SMC_stage2AndLater2_newStrategy_type2_network(measConfigID, configID, samplingSize, criteria,...
