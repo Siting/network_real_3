@@ -50,7 +50,7 @@ for sample = 1 : length(oldWeights)
         REJECTED_POP = saveSample(REJECTED_POP, sample, POPULATION_2);
     end
     
-    if mod(sample, 80) == 0
+    if mod(sample, 100) == 0
         disp(['sample ' num2str(sample) ' filtering finished']);
     end
     
