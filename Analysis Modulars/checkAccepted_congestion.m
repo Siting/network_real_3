@@ -1,8 +1,8 @@
 clear all
 clc
 
-series = 74;
-studyStages = [1;3;5;7;9;];
+series = 70;
+studyStages = [1;2;3;4;5;6];
 studyLinks = [1;3;5;7;9];
 numSampleStudied = 100;
 linkLengths = [0.1; 1; 0.25; 0.18; 0.5];  % unit: mile

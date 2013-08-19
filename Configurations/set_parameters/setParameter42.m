@@ -47,4 +47,4 @@ PARAMETER.modelLast = 1;     % for model selection function
 PARAMETER.populationSize = 100;
 PARAMETER.samplingSize = 150;
 PARAMETER.thresholdVector = [1 1; 50 50; 50 50; 50 50; 50 50;...
-    50 50; 50 50; 50 50; 50 50];
+    50 50; 50 50; 50 50;];

@@ -37,14 +37,8 @@ end
 % NEW WAY
 means = travelTime_means;
 vars = expectAR .* travelTime_vars;
-
 %===========================================================
 for j = 1 : populationSize
-    for i = 1 : length(linkIds)   
-        LINK(i).vmax = POPULATION_2(i).samples(1,j);
-        LINK(i).dmax = LINK(i).numLanes * POPULATION_2(i).samples(2,j);
-        LINK(i).dc = LINK(i).numLanes * POPULATION_2(i).samples(3,j);
-    end
     [vmax1, vmax3, vmax5, vmax7, dmax5, dmax7, dmax9] = sampleFUNDA_newStrategy(LINK, means, vars);
     
     POPULATION_2(1).samples(1,j) = vmax1;

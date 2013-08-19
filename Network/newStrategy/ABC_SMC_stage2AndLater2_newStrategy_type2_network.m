@@ -72,7 +72,7 @@ while(condition)
     % save
     NEW_ACCEPTED_POP = saveNewSamples(NEW_ACCEPTED_POP, POPULATION_3);
     NEW_REJECTED_POP = saveNewSamples(NEW_REJECTED_POP, POPULATION_4);
-    keyboard
+    
     % take one out use as example
     newAcceptedPop1 = NEW_ACCEPTED_POP(1).samples;
     % check population size
