@@ -1,4 +1,5 @@
-function[NEW_ACCEPTED_POP, newWeights, ar, NEW_REJECTED_POP, errorCollectionForStage, thresholdVector, criteriaForStage]...
+function[NEW_ACCEPTED_POP, newWeights, ar, NEW_REJECTED_POP,...
+    errorCollectionForStage, thresholdVector, criteriaForStage, travelTime_means, travelTime_vars]...
     = ABC_SMC_stage2AndLater2_newStrategy_type2_network(measConfigID, configID, samplingSize, criteria,...
                     ACCEPTED_POP, REJECTED_POP, ALL_SAMPLES, oldWeights, populationSize, PARAMETER, CONFIG,...
                     sensorMetaDataMap, LINK, SOURCE_LINK, SINK_LINK, JUNCTION, stage, linkMap, testingSensorIDs,...
@@ -40,14 +41,15 @@ while(condition)
     if samplingStrategy == 2
         [POPULATION_2] = generatePOPULATION2_newStrategy(travelTime_means', travelTime_vars',...
             configID, linkMap, populationSize, LINK);
+        indexCollection_1 = ones(populationSize,1);
     end
 
     % update Fundamental for links etc, and then run simulation
     disp('start simulation');
     [LINK, SOURCE_LINK, SINK_LINK, JUNCTION, T, deltaTinSecond, ROUND_SAMPLES]...
         = updateFunAndSimulate_type2_network(POPULATION_2, LINK, SOURCE_LINK, SINK_LINK, JUNCTION,...
-        CONFIG, PARAMETER, sensorMetaDataMap, configID, stage, linkMap, ROUND_SAMPLES,...
-        occuDataMatrix_source, occuDataMatrix_sink, travelTime_means, travelTime_vars);
+        CONFIG, PARAMETER, indexCollection_1, sensorMetaDataMap, configID, stage, linkMap, ROUND_SAMPLES,...
+        occuDataMatrix_source, occuDataMatrix_sink);
 
     % filter samples, accept or reject?
     disp('start calibration');
@@ -56,7 +58,7 @@ while(condition)
         T, deltaTinSecond, thresholdVector, errorCollectionForStage, ROUND_SAMPLES);
     
     if times <= 5
-        save([CONFIG.evolutionDataFolder '-sampledAndPertubed-stage-' num2str(stage) '-time-' num2str(times)], 'POPULATION_1', 'POPULATION_2',...
+        save([CONFIG.evolutionDataFolder '-sampledAndPertubed-stage-' num2str(stage) '-time-' num2str(times)], 'POPULATION_2',...
             'POPULATION_3', 'POPULATION_4');
     end
 
@@ -78,9 +80,7 @@ while(condition)
         ar = size(newAcceptedPop1,2) / (times * length(oldWeights));
         NEW_ACCEPTED_POP = trimExessiveSamples(NEW_ACCEPTED_POP,populationSize);
         %% update weights
-        newWeights = updateWeights(NEW_ACCEPTED_POP, oldWeights, ACCEPTED_POP, configID, linkMap, nodeMap);
-        weightSum = sum(newWeights);
-        newWeights = newWeights ./ weightSum;
+        newWeights = oldWeights;
         condition = false;
     elseif size(newAcceptedPop1,2) < populationSize
         disp(['population size is ' num2str(size(newAcceptedPop1,2)) ', start reasampling.']);

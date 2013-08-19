@@ -25,7 +25,7 @@ global samplingStrategy
 
 
 % name the index of configuration(s) 
-configID = [51];
+configID = [52];
 
 % boundary sensorIDs & testing sensorIDs
 samplingStrategy = 2; % 2: new
@@ -39,7 +39,7 @@ samplingModeDc = 1;
 occuThreshold = 0.2;
 
 ABC_selection_type = 2;
-boundarySourceSensorIDs = [400468; 402955; 402954; 402950];
+boundarySourceSensorIDs =  [400468; 402955; 402954; 402950];
 boundarySinkSensorIDs = [402953; 400698];
 testingSensorIDs = [400739; 400363];
 funsOption = 2;    % 1: uniform,  2:non-uniform

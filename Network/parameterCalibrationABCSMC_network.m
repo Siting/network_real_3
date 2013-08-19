@@ -40,6 +40,8 @@ varForRounds = [];
 timeForRounds = [];
 weightsForRounds = [];
 criteriaForRounds = [];
+travelTime_means_Rounds = [];
+travelTime_vars_Rounds = [];
 ALL_SAMPLES = initializeAllSamples(linkMap);
 numStages = size(thresholdVector,1);
 
@@ -78,11 +80,11 @@ for stage = 1 : numStages  % iterate stages
                 % sampling parameters for FUNDAMENTAL diagram
                 % only used for funsOption==1
                 FUNDAMENTAL = sampleFUNDA(guessedFUNDAMENTAL, vmaxVar, dmaxVar, dcVar);
-                
+
                 % Initialize links
                 [LINK, SOURCE_LINK, SINK_LINK, JUNCTION, numCellsNet, ALL_SAMPLES, numLanes, ROUND_SAMPLES] = initializeAll_network(FUNDAMENTAL, linkMap, JUNCTION, deltaT, numEns, CONFIG, ALL_SAMPLES,...
                     SOURCE_LINK, SINK_LINK, junctionSolverType, LINK, ROUND_SAMPLES);
-                
+
                 % run forward simulation
                 [LINK] = runForwardSimulation(LINK, SOURCE_LINK, SINK_LINK, JUNCTION, deltaT,...
                     numEns, numTimeSteps, nT, junctionSolverType, occuDataMatrix_source, occuDataMatrix_sink);
@@ -112,7 +114,7 @@ for stage = 1 : numStages  % iterate stages
                 ar = size(ACCEPTED_POP(1).samples,2) / (times*samplingSize);
                 ACCEPTED_POP = trimExessiveSamples(ACCEPTED_POP,populationSize);
                 state = false;
-            elseif size(ACCEPTED_POP(1).samples,2) < populationSize
+            elseif size(ACCEPTED_POP(1).samples,2) < populationSize               
                 disp(['population size is ' num2str(size(ACCEPTED_POP(1).samples,2)) ', start reasampling.']);
                 times = times + 1;
             end
@@ -145,7 +147,7 @@ for stage = 1 : numStages  % iterate stages
         stageStart = tic;
         
         if samplingStrategy == 2
-            [ACCEPTED_POP, weights, ar, REJECTED_POP, errorCollectionForStage, thresholdVector, criteriaForStage]...
+            [ACCEPTED_POP, weights, ar, REJECTED_POP, errorCollectionForStage, thresholdVector, criteriaForStage, travelTime_means, travelTime_vars]...
                 = ABC_SMC_stage2AndLater2_newStrategy_type2_network(measConfigID, configID, samplingSize, criteria,...
                 ACCEPTED_POP, REJECTED_POP, ALL_SAMPLES, weights, populationSize, PARAMETER, CONFIG,...
                 sensorMetaDataMap, LINK, SOURCE_LINK, SINK_LINK, JUNCTION, stage, linkMap, testingSensorIDs,...
@@ -157,6 +159,12 @@ for stage = 1 : numStages  % iterate stages
                 sensorDataMatrix, nodeMap, errorCollectionForStage, ROUND_SAMPLES, occuDataMatrix_source, occuDataMatrix_sink);
         else
             disp('sampling strategy is not assigned.');
+        end
+        
+        if stage == numStages
+            [travelTime_values] = calculateTravelTime_newStrategy(ACCEPTED_POP, linkMap, sensorMetaDataMap);
+            travelTime_means = mean(travelTime_values,1); % each column is a travel time item
+            travelTime_vars = var(travelTime_values,0,1);
         end
         
         save([evolutionDataFolder '-acceptedPop-stage-' num2str(stage)], 'ACCEPTED_POP');
@@ -175,11 +183,19 @@ for stage = 1 : numStages  % iterate stages
     arForRounds = [arForRounds ar];
     weightsForRounds = [weightsForRounds; weights];
     criteriaForRounds = [criteriaForRounds; criteriaForStage];
-    save([evolutionDataFolder '-calibrationResult-stage' num2str(stage)],'ar', 'meanForLinks', 'varForLinks', 'thresholdVector',...
-        'stageT', 'criteriaForStage', 'weightsForRounds', 'perturbationFactor');
+    if stage ~= 1
+        travelTime_means_Rounds = [travelTime_means_Rounds; travelTime_means];
+        travelTime_vars_Rounds = [travelTime_vars_Rounds; travelTime_vars];
+        save([evolutionDataFolder '-calibrationResult-stage' num2str(stage)],'ar', 'meanForLinks', 'varForLinks', 'thresholdVector',...
+        'stageT', 'criteriaForStage', 'weightsForRounds', 'perturbationFactor', 'travelTime_means', 'travelTime_vars');
+    else
+        save([evolutionDataFolder '-calibrationResult-stage' num2str(stage)],'ar', 'meanForLinks', 'varForLinks', 'thresholdVector',...
+            'stageT', 'criteriaForStage', 'weightsForRounds', 'perturbationFactor');     
+    end
     
 end
 
 tTotalEnd = toc(tTotalStart);
 save([evolutionDataFolder '-calibrationResult'],'arForRounds', 'meanForRounds', 'varForRounds', 'thresholdVector',...
-    'timeForRounds', 'weightsForRounds', 'tTotalEnd', 'criteriaForRounds', 'perturbationFactor');
+    'timeForRounds', 'weightsForRounds', 'tTotalEnd', 'criteriaForRounds', 'perturbationFactor', 'travelTime_means_Rounds',...
+    'travelTime_vars_Rounds');

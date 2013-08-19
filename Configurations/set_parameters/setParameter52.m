@@ -1,8 +1,8 @@
-function[PARAMETER]=setParameter51(PARAMETER)
+function[PARAMETER]=setParameter52(PARAMETER)
 
 % This file contains parameter settings for ABC algorithm
 
-PARAMETER.parameterID=51;
+PARAMETER.parameterID=52;
 PARAMETER.T=0.5;                         % time intervals (mins)
 PARAMETER.deltaTinSecond=2;           % each time step is 2s long
 PARAMETER.deltaT=secondsToHour(PARAMETER.deltaTinSecond);     % unit: hour
@@ -11,8 +11,8 @@ PARAMETER.samplingInterval = 1;          % sample density every # time steps
 
 PARAMETER.startString='2011-10-22 00:00:00.000';
 PARAMETER.endString='2011-10-22 00:25:00.000';
-PARAMETER.startTime=4;
-PARAMETER.endTime=5.5;   % 0.5 = 30min
+PARAMETER.startTime= 8;
+PARAMETER.endTime= 10;
 PARAMETER.startTimeDate=datenum(PARAMETER.startString);
 PARAMETER.unixTimeStep=PARAMETER.deltaTinSecond*1/24/3600;
 
@@ -45,6 +45,6 @@ PARAMETER.trueNodeRatioVar = 0;
 PARAMETER.modelFirst = 1;    % for model selection function
 PARAMETER.modelLast = 1;     % for model selection function
 PARAMETER.populationSize = 100;
-PARAMETER.samplingSize = 100;
-PARAMETER.thresholdVector = [0.24 0.24; 0.2348 0.2348; 0.2330 0.2330; 0.2310 0.2310; 0.2286 0.2286;...
-    0.2268 0.2268; 0.2251 0.2251;];
+PARAMETER.samplingSize = 150;
+PARAMETER.thresholdVector = [1 1; 50 50; 50 50; 50 50; 50 50;...
+    50 50; 50 50; 50 50; 50 50];

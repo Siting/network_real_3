@@ -2,6 +2,7 @@ function[LINK, ROUND_SAMPLES] = loadLinksNew_newStrategy(linkMap,FUNDAMENTAL, co
 
 global funsOption
 global sensorMode
+global samplingStrategy
 
 linkIds = linkMap.keys;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -61,8 +62,10 @@ for i = 1 : length(linkIds)
     LINK(linkIds{i}) = link;
 end
 
-%===========================================================
-[vmax1, vmax3, vmax5, vmax7, dmax5, dmax7, dmax9] = sampleFUNDA_newStrategy(LINK, means, vars);
-
-LINK = assignNewSamples_newStrategy(vmax1, vmax3, vmax5, vmax7, dmax5, dmax7, dmax9, LINK);
-%===========================================================
+if samplingStrategy == 2
+    %===========================================================
+    [vmax1, vmax3, vmax5, vmax7, dmax5, dmax7, dmax9] = sampleFUNDA_newStrategy(LINK, means, vars);  
+    LINK = assignNewSamples_newStrategy(vmax1, vmax3, vmax5, vmax7, dmax5, dmax7, dmax9, LINK);
+    ROUND_SAMPLES = updateRoundSamples_newStrategy(LINK, ROUND_SAMPLES);
+    %===========================================================
+end
