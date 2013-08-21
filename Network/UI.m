@@ -25,7 +25,7 @@ global samplingStrategy
 
 
 % name the index of configuration(s) 
-configID = [51];
+configID = [52];
 
 % boundary sensorIDs & testing sensorIDs
 samplingStrategy = 2; % 2: new

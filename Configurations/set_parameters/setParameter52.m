@@ -45,6 +45,6 @@ PARAMETER.trueNodeRatioVar = 0;
 PARAMETER.modelFirst = 1;    % for model selection function
 PARAMETER.modelLast = 1;     % for model selection function
 PARAMETER.populationSize = 100;
-PARAMETER.samplingSize = 80;
-PARAMETER.thresholdVector = [1 1; 0.7445 0.7445; 0.7032 0.7230; 0.6632 0.6632; 0.6468 0.6468;...
-    0.6326 0.6326;];
+PARAMETER.samplingSize = 300;
+PARAMETER.thresholdVector = [1 1; 0.7224 0.7224; 0.6861 0.6861; 0.6565 0.6565; 0.6400 0.6400;...
+    0.6269 0.6269;];

@@ -49,7 +49,7 @@ for stage = 1 : numStages  % iterate stages
     disp(['stage ' num2str(stage)]);
     
     errorCollectionForStage = [];
-    
+
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     if stage == 1
         stageStart = tic;
@@ -103,7 +103,7 @@ for stage = 1 : numStages  % iterate stages
             
             % noisy sensor data
             [sensorDataMatrix] = getNoisySensorData_network(testingSensorIDs, T, startTime, endTime);
-            
+
             % ABC SMC stage 1: filter samples according
             [ACCEPTED_POP, REJECTED_POP, indexCollection, errorCollectionForStage] = ABC_SMC_stage1_type2_network(measConfigID, CONFIG.configID, samplingSize, ALL_SAMPLES,...
                 populationSize, times, ACCEPTED_POP, REJECTED_POP, indexCollection, testingSensorIDs, sensorDataMatrix, nodeMap,...

@@ -7,6 +7,7 @@ function[NEW_ACCEPTED_POP, newWeights, ar, NEW_REJECTED_POP,...
                 
 global samplingStrategy
 global thresholdChoice
+global sensorMode
    
 condition = true;
 [NEW_ACCEPTED_POP, NEW_REJECTED_POP] = initializeAcceptedRejected(linkMap);
@@ -37,6 +38,12 @@ elseif samplingStrategy ~= 1
 end
 
 while(condition)
+    % initialize ROUND_SAMPLES
+    if sensorMode == 2
+        ROUND_SAMPLES = initializeAllSamples(linkMap);
+    else
+        ROUND_SAMPLES = [];
+    end
     % generate POPULATION_2 instead of using the SMC method
     if samplingStrategy == 2
         [POPULATION_2] = generatePOPULATION2_newStrategy(travelTime_means', travelTime_vars',...
@@ -72,7 +79,7 @@ while(condition)
     % save
     NEW_ACCEPTED_POP = saveNewSamples(NEW_ACCEPTED_POP, POPULATION_3);
     NEW_REJECTED_POP = saveNewSamples(NEW_REJECTED_POP, POPULATION_4);
-    keyboard
+
     % take one out use as example
     newAcceptedPop1 = NEW_ACCEPTED_POP(1).samples;
     % check population size

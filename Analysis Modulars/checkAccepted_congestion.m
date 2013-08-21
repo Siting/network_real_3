@@ -1,7 +1,7 @@
 clear all
 clc
 
-series = 70;
+series = 73;
 studyStages = [1;2;3;4;5;6];
 studyLinks = [1;3;5;7;9];
 numSampleStudied = 100;
@@ -41,7 +41,7 @@ for j = 1 : length(studyStages)
     travelTimeCollection_sensor_1 = [travelTimeCollection_sensor_1 travelTimeCollection_1];
     travelTimeCollection_sensor_2 = [travelTimeCollection_sensor_2 travelTimeCollection_2];
 end
-
+keyboard
 figure
 subplot(2,1,1)
 boxplot(travelTimeCollection_sensor_1*60, 'labels', studyStages);
