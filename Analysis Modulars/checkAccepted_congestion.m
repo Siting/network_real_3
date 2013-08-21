@@ -1,7 +1,7 @@
 clear all
 clc
 
-series = 73;
+series = 81;
 studyStages = [1;2;3;4;5;6];
 studyLinks = [1;3;5;7;9];
 numSampleStudied = 100;

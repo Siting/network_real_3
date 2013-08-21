@@ -30,7 +30,7 @@ configID = [52];
 % boundary sensorIDs & testing sensorIDs
 samplingStrategy = 2; % 2: new
 thresholdChoice = 1;  % 1: manually 2:adaptive
-expectAR = 0.6;
+expectAR = 0.7;
 sensorMode = 2; % 1: density, 2: flow
 errorStart = 4;  % # of data ignored ahead
 samplingModeVmax = 1; % 1: Gaussian, 2: uniform
